@@ -9,12 +9,12 @@ def tratamentoCsv():
         print("Arquivo aberto com sucesso!")
 
         # Exibir a quantidade de dados carregados (número de linhas no DataFrame)
-        print(f"Quantidade de dados carregados: {dados.shape[0]}")
+        print(f"Quantidade de dados carregados: {len(dados)}")
 
         # Exibir a quantidade de homens e mulheres
         cleanDados = dados.dropna(subset=["Gender"])
-        qtdHomens = cleanDados[cleanDados["Gender"] == "Male"].shape[0]
-        qtdMulheres = cleanDados[cleanDados["Gender"] == "Female"].shape[0]
+        qtdHomens = len(cleanDados[cleanDados["Gender"] == "Male"])
+        qtdMulheres = len(cleanDados[cleanDados["Gender"] == "Female"])
 
         print(f"Quantidade de homens: {qtdHomens}")
         print(f"Quantidade de mulheres: {qtdMulheres}")
