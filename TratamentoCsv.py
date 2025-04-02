@@ -1,11 +1,11 @@
 import pandas as pd
 
 def tratamentoCsv():
-    inputAlunos = input("Informe o diretório ou nome do arquivo em CSV: ") # Caminho do arquivo
-    inputAlunos = "Students_Grading_Dataset.csv"
+    inputAlunos = input("Informe o diretório ou nome do arquivo em CSV (ou vazio para ./Students_Grading_Dataset.csv): ") # Caminho do arquivo
+    if inputAlunos == "":
+        inputAlunos = "Students_Grading_Dataset.csv"
     try:
-        dataAlunos = open(inputAlunos, "r")  # Usando modo leitura ("r") para teste
-        dados = pd.read_csv(dataAlunos)
+        dados = pd.read_csv(inputAlunos)
         print("Arquivo aberto com sucesso!")
 
         # Exibir a quantidade de dados carregados (número de linhas no DataFrame)
@@ -20,6 +20,8 @@ def tratamentoCsv():
         print(f"Quantidade de mulheres: {qtdMulheres}")
 
         # Exibir quantos registros sem dados sobre a educação dos país.
+        qtdSemDadosParentEducationLevel = dados["Parent_Education_Level"].isna().sum()
+        print(f"Quantidade de registros sem dados sobre a educação dos pais: {qtdSemDadosParentEducationLevel}")
 
         # Remover os registros que tem a educação do país vazios.
         # Alterar os dados de presença (Attendance) que estão null para a mediana.

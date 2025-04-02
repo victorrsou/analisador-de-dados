@@ -1,26 +1,24 @@
 # Carregamento de um arquivo CSV ou JSON com dados de alunos
 import pandas as pd
 from TratamentoCsv import tratamentoCsv
-from TratamentoJson import tratamentoJson
 
 def iniciarApp():
     while True:
         try:
             # Solicita a entrada do usuário
-            opcaoArquivo = int(input("Informe se deseja inserir um arquivo CSV ou JSON para analisar os dados (Digite '1' para JSON ou '2' para CSV): "))
-            
+            opcaoArquivo = int(input("Informe se deseja inserir um arquivo CSV para analisar os dados (Digite '1' para ler CSV ou '2' para sair): "))
+              
             # Verifica a opção usando match-case
             match opcaoArquivo:
                 case 1:
-                    print("Você escolheu analisar dados no formato JSON.")
-                    tratamentoJson()
-                    # Insira aqui a lógica para tratar arquivos JSON
-                case 2:
                     print("Você escolheu analisar dados no formato CSV.")
                     tratamentoCsv()
                     # Insira aqui a lógica para tratar arquivos CSV
+                case 2:
+                    print("Tchau!")
+                    break
                 case _:
-                    print("Opção inválida. Por favor, escolha '1' para JSON ou '2' para CSV.")
+                    print("Opção inválida. Por favor, escolha '1' para ler CSV ou '2' para sair.")
                     continue  # Permite ao usuário tentar novamente
         except ValueError:
             print("Entrada inválida! Certifique-se de inserir um número inteiro.")
