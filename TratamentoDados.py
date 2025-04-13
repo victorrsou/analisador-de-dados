@@ -1,5 +1,6 @@
 import pandas as pd
 import statistics
+from matplotlib import pyplot as plt
 
 def tratamentoDados(dados: pd.DataFrame):
     try:
@@ -22,7 +23,7 @@ def tratamentoDados(dados: pd.DataFrame):
         dados.dropna(subset=["Parent_Education_Level"],inplace=True)
         # Alterar os dados de presença (Attendance) que estão null para a mediana.
         medianaPresenca = dados["Attendance (%)"].median()
-        dados["Attendance (%)"].fillna(medianaPresenca, inplace=True)
+        dados.fillna(medianaPresenca, inplace=True)
         # Apresentar o somatório de Attendance
         somatorioPresenca = dados["Attendance (%)"].sum()
         print(f"O somatório de presença é: {somatorioPresenca}")
@@ -61,7 +62,33 @@ def tratamentoDados(dados: pd.DataFrame):
                 print("Erro: Entrada inválida. Digite um número.")
 
         # O sistema deve produzir gráfico de dispersão para "horas de sono" x "nota final"
+        while True:
+            try:
+                # Solicita entrada ao usuário
+                opcaoGraficoDispersao = int(input("\nInforme se deseja exibir o gráfico de dispersão para 'horas de sono' x 'nota final' (Digite '1' para SIM ou '2' para NÃO): "))
+
+                # Verifica opção
+                match opcaoGraficoDispersao:
+                    case 1:
+                        dadosGraficox = dados['Sleep_Hours_per_Night']
+                        dadosGraficoy = dados["Final_Score"]
+
+                        plt.scatter(dadosGraficox, dadosGraficoy)
+                        plt.title("Horas de Sono x Nota Final")
+                        plt.xlabel("Horas de Sono")
+                        plt.ylabel("Nota Final")
+                        plt.show()
+                    case 2:
+                        # Realizar operação exibir gráfico de barras e gráfico de pizza
+                        print("Desenvolver caso 2")
+                    case _:
+                        print("Opção inválida. Por favor, escolha '1' para exibir o gráfico de dispersão ou '2' para não.")
+                        continue       
+            except ValueError:
+                print("Entrada inválida! Certifique-se de inserir um número inteiro.")
+        
         # Gráfico de barras - Idade x média das notas intermediárias (midterm_Score)
+        print("teste")
         # Gráfico de pizza para as idades (Agrupadas: até 17 ;18 a 21; 22 a 24; 25 ou mais)
 
     except Exception as e:
