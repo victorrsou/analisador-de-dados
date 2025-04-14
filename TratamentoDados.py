@@ -36,7 +36,7 @@ def tratamentoDados(dados: pd.DataFrame):
             print(f"{i}: {col}")
 
         while True:
-            escolha = input("\nDigite o número da coluna desejada, ou X para sair: ")
+            escolha = input("\nDigite o número da coluna desejada, ou X para continuar: ")
             if escolha.lower() == "x":
                 break
             try:
@@ -58,99 +58,61 @@ def tratamentoDados(dados: pd.DataFrame):
             except ValueError:
                 print("Erro: Entrada inválida. Digite um número.")
 
-        # O sistema deve produzir gráfico de dispersão para "horas de sono" x "nota final"
-        while True:
-            try:
-                # Solicita entrada ao usuário
-                opcaoGraficoDispersao = int(input("\nInforme se deseja exibir o gráfico de dispersão para 'horas de sono' x 'nota final' (Digite '1' para SIM ou '2' para NÃO): "))
+        input("\nAperte ENTER para apresentar os gráficos Horas de Sono x Nota Final, Idade x Média das Notas Intermediárias, Distribuição por Faixas Etárias: ")
 
-                # Verifica opção
-                match opcaoGraficoDispersao:
-                    case 1:
-                        dadosGraficox = dados['Sleep_Hours_per_Night']
-                        dadosGraficoy = dados["Final_Score"]
-                        plt.scatter(dadosGraficox, dadosGraficoy)
-                        plt.title("Horas de Sono x Nota Final")
-                        plt.xlabel("Horas de Sono")
-                        plt.ylabel("Nota Final")
-                        plt.show()
-                        break
+        # Gráfico 1: Horas de Sono x Nota Final
+        dadosGraficox = dados['Sleep_Hours_per_Night']
+        dadosGraficoy = dados["Final_Score"]
 
-                    case 2:
-                        # Realizar operação exibir gráfico de barras e gráfico de pizza
-                        print("\nGerando gráfico de barras: Idade x Média das Notas Intermediárias...")
+        # Gráfico 2: Idade x Média das Notas Intermediárias
+        idades = dados['Age']
+        notas = dados['Midterm_Score']
+        somaNotas = {}
+        contagem = {}
 
-                        ## Gráfico de barras - Idade x média das notas intermediárias (Midterm_Score)
-                        idades = dados['Age']
-                        notas = dados['Midterm_Score']
+        for idade, nota in zip(idades, notas):
+            if idade in somaNotas:
+                somaNotas[idade] += nota
+                contagem[idade] += 1
+            else:
+                somaNotas[idade] = nota
+                contagem[idade] = 1
 
-                        ## Dicionário para somar e contar
-                        somaNotas = {}
-                        contagem = {}
+        medias = {idade: somaNotas[idade] / contagem[idade] for idade in somaNotas}
+        idades_ordenadas = sorted(medias.keys())
+        medias_ordenadas = [medias[idade] for idade in idades_ordenadas]
 
-                        for idade, nota in zip(idades, notas):
-                            if idade in somaNotas:
-                                somaNotas[idade] += nota
-                                contagem[idade] += 1
-                            else:
-                                somaNotas[idade] = nota
-                                contagem[idade] = 1
+        # Gráfico 3: Distribuição por Faixas Etárias
+        faixa1 = sum(1 for idade in dados['Age'] if idade <= 17)
+        faixa2 = sum(1 for idade in dados['Age'] if 18 <= idade <= 21)
+        faixa3 = sum(1 for idade in dados['Age'] if 22 <= idade <= 24)
+        faixa4 = sum(1 for idade in dados['Age'] if idade >= 25)
+        valores = [faixa1, faixa2, faixa3, faixa4]
+        rotulos = ['Até 17', '18 a 21', '22 a 24', '25 ou mais']
 
-                        ## Calcular médias por idade
-                        medias = {}
-                        for idade in somaNotas:
-                            medias[idade] = somaNotas[idade] / contagem[idade]
+        # Configurar subplots
+        fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
-                        ## Organizar para o gráfico
-                        idades_ordenadas = sorted(medias.keys())
-                        medias_ordenadas = [medias[idade] for idade in idades_ordenadas]
+        # Configurar o primeiro gráfico
+        axes[0].scatter(dadosGraficox, dadosGraficoy)
+        axes[0].set_title("Horas de Sono x Nota Final")
+        axes[0].set_xlabel("Horas de Sono")
+        axes[0].set_ylabel("Nota Final")
 
-                        ## Exibir gráfico de barras
-                        plt.figure(figsize=(8, 5))
-                        plt.bar(idades_ordenadas, medias_ordenadas)
-                        plt.title("Idade x Média das Notas Intermediárias (Midterm_Score)")
-                        plt.xlabel("Idade")
-                        plt.ylabel("Média da Nota Intermediária")
-                        plt.grid(axis='y')
-                        plt.tight_layout()
-                        plt.show()
+        # Configurar o segundo gráfico
+        axes[1].bar(idades_ordenadas, medias_ordenadas)
+        axes[1].set_title("Idade x Média das Notas Intermediárias")
+        axes[1].set_xlabel("Idade")
+        axes[1].set_ylabel("Média da Nota Intermediária")
+        axes[1].grid(axis='y')
+        axes[1].set_ylim(min(medias_ordenadas) - 3,max(medias_ordenadas) + 3)
 
-                        ## Gráfico de pizza por faixa etária
-                        print("\nGerando gráfico de pizza com a distribuição por faixas etárias...")
+        # Configurar o terceiro gráfico
+        axes[2].pie(valores, labels=rotulos, autopct='%1.1f%%', startangle=90)
+        axes[2].set_title("Distribuição por Faixa Etária")
 
-                        faixa1 = 0  # até 17
-                        faixa2 = 0  # 18 a 21
-                        faixa3 = 0  # 22 a 24
-                        faixa4 = 0  # 25 ou mais
-
-                        for idade in dados['Age']:
-                            if idade <= 17:
-                                faixa1 += 1
-                            elif idade <= 21:
-                                faixa2 += 1
-                            elif idade <= 24:
-                                faixa3 += 1
-                            else:
-                                faixa4 += 1
-
-                        valores = [faixa1, faixa2, faixa3, faixa4]
-                        rotulos = ['Até 17', '18 a 21', '22 a 24', '25 ou mais']
-
-                        ## Geração do gráfico
-                        plt.figure(figsize=(6, 6))
-                        plt.pie(valores, labels=rotulos, autopct='%1.1f%%', startangle=90)
-                        plt.title("Distribuição de Estudantes por Faixa Etária")
-                        plt.axis('equal')
-                        plt.show()
-
-                        break  # ← Sai do while após mostrar os gráficos
-
-                    case _:
-                        print("Opção inválida. Por favor, escolha '1' para exibir o gráfico de dispersão ou '2' para não.")
-                        continue
-
-            except ValueError:
-                print("Entrada inválida! Certifique-se de inserir um número inteiro.")
+        plt.tight_layout()
+        plt.show()
 
     except Exception as e:
-        print(f"Ocorreu um erro: {e}")
+        print(f"\nOcorreu um erro: {e}")

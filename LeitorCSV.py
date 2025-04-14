@@ -10,9 +10,9 @@ def leitorCSV():
         print("\nArquivo aberto com sucesso!")
         return dados
     except FileNotFoundError:
-        print(f"O arquivo '{inputAlunos}' não foi encontrado.")
+        print(f"\nO arquivo '{inputAlunos}' não foi encontrado.")
     except Exception as e:
-        print(f"Ocorreu um erro: {e}")
+        print(f"\nOcorreu um erro: {e}")
 
 
 if __name__ == "__main__":

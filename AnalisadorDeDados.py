@@ -22,15 +22,15 @@ def iniciarApp():
                     if dados is not None and not dados.empty:
                         tratamentoDados(dados)
                 case _:
-                    print("Opção inválida. Por favor, escolha '1' para ler CSV ou '2' para JSON.")
+                    print("\nOpção inválida. Por favor, escolha '1' para ler CSV ou '2' para JSON.")
                     continue  
         except ValueError:
-            print("Entrada inválida! Certifique-se de inserir um número inteiro.")
+            print("\nEntrada inválida! Certifique-se de inserir um número inteiro.")
 
         # Pergunta ao usuário se deseja executar novamente
         executar_novamente = input("\nDeseja executar o programa novamente? (S/N): ").strip().lower()
         if executar_novamente != 's':
-            print("Encerrando a aplicação. Até a próxima!")
+            print("\nEncerrando a aplicação. Até a próxima!")
             break
 
 
