@@ -1,4 +1,5 @@
 import pandas as pd
+from TratamentoDados import tratamentoDados
 
 def leitorCSV():
     inputAlunos = input("\nInforme o diretório ou nome do arquivo em CSV (ou vazio para ./Students_Grading_Dataset.csv): ") # Caminho do arquivo
@@ -12,3 +13,9 @@ def leitorCSV():
         print(f"O arquivo '{inputAlunos}' não foi encontrado.")
     except Exception as e:
         print(f"Ocorreu um erro: {e}")
+
+
+if __name__ == "__main__":
+    dados = leitorCSV()
+    if dados is not None:
+        tratamentoDados(dados)
